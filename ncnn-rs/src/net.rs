@@ -31,6 +31,21 @@ impl Net {
         }
     }
 
+    pub fn load_param_from_slice(&mut self, param: &[u8]) -> anyhow::Result<()> {
+        // TODO: ensure the slice is loaded correctly then switch to direct method
+        //let param_ptr = param.as_ptr() as *const c_char;
+        //if unsafe { ncnn_net_load_param_memory(self.ptr, param_ptr) } != 0 {
+        //anyhow::bail!("Error loading params");
+        //} else {
+        //Ok(())
+        //}
+        let temp_file_name = rand::random::<u64>().to_string() + ".param";
+        std::fs::write(&temp_file_name, param)?;
+        let res = self.load_param(&temp_file_name);
+        std::fs::remove_file(&temp_file_name)?;
+        res
+    }
+
     pub fn load_model(&mut self, path: &str) -> anyhow::Result<()> {
         let c_str = CString::new(path).unwrap();
         if unsafe { ncnn_net_load_model(self.ptr, c_str.as_ptr()) } != 0 {
@@ -38,6 +53,21 @@ impl Net {
         } else {
             Ok(())
         }
+    }
+
+    pub fn load_model_from_slice(&mut self, model: &[u8]) -> anyhow::Result<()> {
+        // TODO: fix this to use direct method
+        //let model_ptr = model.as_ptr() as *const c_uchar;
+        //if unsafe { ncnn_net_load_model_memory(self.ptr, model_ptr) } != 0 {
+        //anyhow::bail!("Error loading model");
+        //} else {
+        //Ok(())
+        //}
+        let temp_file_name = rand::random::<u64>().to_string() + ".bin";
+        std::fs::write(&temp_file_name, model)?;
+        let res = self.load_model(&temp_file_name);
+        std::fs::remove_file(&temp_file_name)?;
+        res
     }
 
     pub fn load_model_datareader(&mut self, dr: &DataReader) -> anyhow::Result<()> {

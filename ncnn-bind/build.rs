@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::str;
 
-const DEFAULT_NCNN_TAG: &'static str = "20230517";
+const DEFAULT_NCNN_TAG: &'static str = "20250916";
 
 #[derive(PartialEq)]
 enum VulkanMode {
