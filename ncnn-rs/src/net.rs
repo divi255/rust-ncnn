@@ -2,6 +2,7 @@ use crate::datareader::DataReader;
 use crate::Extractor;
 use ncnn_bind::*;
 use std::ffi::CString;
+use tempfile::NamedTempFile;
 
 pub struct Net {
     ptr: ncnn_net_t,
@@ -39,10 +40,10 @@ impl Net {
         //} else {
         //Ok(())
         //}
-        let temp_file_name = format!("/tmp/{}.param", rand::random::<u64>().to_string());
-        std::fs::write(&temp_file_name, param)?;
-        let res = self.load_param(&temp_file_name);
-        std::fs::remove_file(&temp_file_name)?;
+        let file = NamedTempFile::new()?;
+        std::fs::write(file.path(), param)?;
+        let res = self.load_param(&file.path().to_string_lossy());
+        file.close()?;
         res
     }
 
@@ -63,10 +64,10 @@ impl Net {
         //} else {
         //Ok(())
         //}
-        let temp_file_name = format!("/tmp/{}.model", rand::random::<u64>().to_string());
-        std::fs::write(&temp_file_name, model)?;
-        let res = self.load_model(&temp_file_name);
-        std::fs::remove_file(&temp_file_name)?;
+        let file = NamedTempFile::new()?;
+        std::fs::write(file.path(), model)?;
+        let res = self.load_model(&file.path().to_string_lossy());
+        file.close()?;
         res
     }
 

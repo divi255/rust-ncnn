@@ -15,7 +15,7 @@ keywords = ["binding", "ncnn", "API"]
 anyhow = "1"
 ncnn-bind = { path = "../ncnn-bind" }
 libc  = "0.2"
-rand = "0.9.2"
+tempfile = "3.23"
 
 [features]
 # Explicitly use static linking
