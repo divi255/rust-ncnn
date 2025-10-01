@@ -39,7 +39,7 @@ impl Net {
         //} else {
         //Ok(())
         //}
-        let temp_file_name = rand::random::<u64>().to_string() + ".param";
+        let temp_file_name = format!("/tmp/{}.param", rand::random::<u64>().to_string());
         std::fs::write(&temp_file_name, param)?;
         let res = self.load_param(&temp_file_name);
         std::fs::remove_file(&temp_file_name)?;
@@ -63,7 +63,7 @@ impl Net {
         //} else {
         //Ok(())
         //}
-        let temp_file_name = rand::random::<u64>().to_string() + ".bin";
+        let temp_file_name = format!("/tmp/{}.model", rand::random::<u64>().to_string());
         std::fs::write(&temp_file_name, model)?;
         let res = self.load_model(&temp_file_name);
         std::fs::remove_file(&temp_file_name)?;
